@@ -2,21 +2,21 @@
     {
         "cardId":1,
         "name":"BIKE",
-        "image":"./assets/images/Frame.png"
+        "image":"/assets/images/Frame.png"
     },
     {
         "cardId":2,
         "name":"CAR",
-        "image":"./assets/images/Frame-1.png" 
+        "image":"/assets/images/Frame-1.png" 
     },
     {
         "cardId":3,
         "name":"BUS",
-        "image":"./assets/images/Frame-2.png" 
+        "image":"/assets/images/Frame-2.png" 
     },
     {
         "cardId":4,
         "name":"TRAIN",
-        "image":"./assets/images/Group.png" 
+        "image":"/assets/images/Group.png" 
     }
 ]

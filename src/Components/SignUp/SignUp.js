@@ -45,16 +45,25 @@ const is_valid_email = (email) => /(.+)@(.+){2,}\.(.+){2,}/.test(email);
     name: "",
     email: "",
     password: "",
+    confirmPassword:"",
     newUser: false,
+    error:""
   });
   const [values, setValues] = React.useState({
     showPassword: false,
+    confirmPassword:false
   });
 
   
 
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
+  const handleClickShowPassword = (change) => {
+
+    if(change=="password"){
+      setValues({ ...values, showPassword: !values.showPassword });
+    }else if(change=="confirmPassword"){
+      setValues({ ...values, confirmPassword: !values.confirmPassword });
+    }
+  
   };
 
   const handleMouseDownPassword = (event) => {
@@ -67,15 +76,37 @@ const is_valid_email = (email) => /(.+)@(.+){2,}\.(.+){2,}/.test(email);
     //debugger;
     // perform validation
     let isValid = true;
+    let formError=""
     if (e.target.name === "email") {
       isValid = is_valid_email(e.target.value);
+      if(!isValid){
+        formError="Email Should be valid"
+      }else{
+        formError=""
+      }
     }
     if (e.target.name === "password") {
-      isValid = e.target.value.length > 8;
+      isValid = e.target.value.length >6;
+      if(!isValid){
+        formError="Password Should be more than  6 characters"
+      }else{
+        formError=""
+      }
+    }
+    if (e.target.name === "confirmPassword") {
+      
+      isValid = e.target.value===user.password;
+      console.log(e.target.value,user.password,isValid)
+      if(!isValid){
+        formError="Password Should be match with confirm password"
+      }else{
+        formError=""
+      }
     }
 
     newUserInfo[e.target.name] = e.target.value;
     newUserInfo.isValid = isValid;
+    newUserInfo.error = formError;
     setUser(newUserInfo);
   };
   const updateUserName = (name) => {
@@ -94,19 +125,22 @@ const is_valid_email = (email) => /(.+)@(.+){2,}\.(.+){2,}/.test(email);
   };
   const onSubmit = () => {
     console.log(user);
-    firebase
+    if(user.isValid){
+      firebase
       .auth()
       .createUserWithEmailAndPassword(user.email, user.password)
       .then((res) => {
         console.log(res);
         updateUserName(user.name);
-        setLoggedInUser({name:res.user.displayName})
+        setLoggedInUser({name:user.name})
         setIsSignIn(true);
         history.replace(from);
       })
       .catch((err) => {
         console.log(err.message);
       });
+    }
+ 
   };
 
   const signUphandle = () => {
@@ -177,6 +211,9 @@ const is_valid_email = (email) => /(.+)@(.+){2,}\.(.+){2,}/.test(email);
         </div>
       )} */}
       <Container maxWidth="sm">
+        <div className="signUp">
+
+        
         {user?.newAccount ? (
           <form onSubmit={(e) => e.preventDefault()}>
             <TextField
@@ -206,7 +243,7 @@ const is_valid_email = (email) => /(.+)@(.+){2,}\.(.+){2,}/.test(email);
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
+                      onClick={()=>handleClickShowPassword("password")}
                       onMouseDown={handleMouseDownPassword}
                     >
                       {values.showPassword ? <Visibility /> : <VisibilityOff />}
@@ -215,6 +252,29 @@ const is_valid_email = (email) => /(.+)@(.+){2,}\.(.+){2,}/.test(email);
                 }
               />
             </FormControl>
+            <FormControl className={clsx(classes.margin, classes.textField)}>
+              <InputLabel htmlFor="standard-adornment-password">
+              Confirm Password
+              </InputLabel>
+              <Input
+                name="confirmPassword"
+                type={values.confirmPassword ? "text" : "password"}
+                value={user.confirmPassword}
+                onChange={handleChange}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={()=>handleClickShowPassword("confirmPassword")}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {values.confirmPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+            {user.error ? <p style={{color:"red",fontWeight:"bold"}}>{user.error}</p>:""}
             <Button
               variant="contained"
               size="large"
@@ -250,7 +310,7 @@ const is_valid_email = (email) => /(.+)@(.+){2,}\.(.+){2,}/.test(email);
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
+                        onClick={()=>handleClickShowPassword("password")}
                         onMouseDown={handleMouseDownPassword}
                       >
                         {values.showPassword ? (
@@ -277,20 +337,32 @@ const is_valid_email = (email) => /(.+)@(.+){2,}\.(.+){2,}/.test(email);
             </form>
           </>
         )}
-        <h4>
+             <h4 style={{textAlign:"center"}}>
           {!user?.newAccount ? (
-            <div style={{ display: "flex" }}>
-              <span>Do you have an account</span>
-              <a onClick={signUphandle}>Create Account</a>
+            <div style={{ display: "flex" ,justifyContent:"center"}}>
+              <span>Do you have an account?</span>
+              <a onClick={signUphandle} style={{color:"#FF6E40"}}>Create Account</a>
             </div>
           ) : (
-            <div style={{ display: "flex" }}>
-              <span>Already have an account</span>
-              <a onClick={signUphandle}>Login</a>
+            <div style={{ display: "flex" ,justifyContent:"center"}}>
+              <span>Already have an account?</span>
+              <a onClick={signUphandle} style={{color:"#FF6E40"}}>Login</a>
             </div>
           )}
         </h4>
-        <Button onClick={googleSignIn}>Google</Button>
+        </div>
+        <Button
+        variant="outlined"
+        color="light"
+        onClick={googleSignIn}
+        style={{display: "flex",
+        margin:"10px auto"
+      }}
+        startIcon={<i style={{color:"red"}} className="fa fa-google"></i>}
+      >
+        Continue with google account
+      </Button>
+
       </Container>
     </div>
   );

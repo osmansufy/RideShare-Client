@@ -30,7 +30,7 @@ const Home = () => {
     {services.map(data=>(
            <Grid key={data.cardId} item xs={3}>
            <div onClick={()=>onChouseRide(data.name)} className="image-wrapper">
-                               <img src={data.image} alt=""/>
+                               <img src={process.env.PUBLIC_URL +data.image} alt=""/>
                                
                                <h5>{data.name}</h5>
                            </div>

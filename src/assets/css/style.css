@@ -24,7 +24,7 @@ li{
 a{
     text-decoration: none;
 }
-form{
+.signUp{
     display: flex;
     flex-direction: column;
     /* border: 1px solid #000; */
@@ -32,6 +32,13 @@ form{
     box-sizing: border-box;
     border-radius: 4px;
     padding: 30px;
+}
+.signUp form{
+    display: flex;
+    flex-direction: column; 
+}
+.signUp form>* {
+    margin-top: 10px;
 }
 a{
     cursor: pointer;
