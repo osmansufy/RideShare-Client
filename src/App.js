@@ -11,6 +11,7 @@ import SignUp from './Components/SignUp/SignUp';
 import { createContext, useState } from 'react';
 import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
 import Destination from './Components/Destination/Destination';
+import DefaultDestination from './Components/Destination/DefaultDestination';
 export const UserContext = createContext();
 export const SignInContext=createContext()
 function App() {
@@ -30,6 +31,9 @@ function App() {
         </Route>
         <PrivateRoute path="/ride/:rideType">
 <Destination />
+        </PrivateRoute>
+        <PrivateRoute exact path="/ride">
+<DefaultDestination />
         </PrivateRoute>
         </Switch>
    </Router>
