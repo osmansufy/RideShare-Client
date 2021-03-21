@@ -1,10 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import './Map.css';
-
+import 'mapbox-gl/dist/mapbox-gl.css';
 mapboxgl.accessToken =
   'pk.eyJ1Ijoib3NtYW5zdWZ5IiwiYSI6ImNrbWhqYWczczA3dHoydW1xdDh4Nm13bHIifQ.FkJoh9xdJsWAqPIM_WIr5A';
-
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 const Map = () => {
   const mapContainerRef = useRef(null);
 

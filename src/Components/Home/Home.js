@@ -28,7 +28,7 @@ const Home = () => {
 <Container style={{padding:"10% 0 15% 0"}} maxWidth="md">
 <Grid container spacing={3}>
     {services.map(data=>(
-           <Grid key={data.cardId} item xs={3}>
+           <Grid key={data.cardId} item xs={12} md={3}>
            <div onClick={()=>onChouseRide(data.name)} className="image-wrapper">
                                <img src={process.env.PUBLIC_URL +data.image} alt=""/>
                                
